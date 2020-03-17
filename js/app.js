@@ -31,7 +31,7 @@ document.body.appendChild(renderer.domElement)
 var geometry = new THREE.BoxGeometry(1, 1, 1)
 
 // three.js has many different materials we can use, which all take an object of properties 
-var material = new THREE.MeshStandardMaterial( { color: '#FFDB99' } )  
+var material = new THREE.MeshStandardMaterial( { color: '#FFDB99' } )   
 
 // A mesh is an object that takes a geometry, and applies a material to it, which we then can insert to our scene, and move freely around.
 var cube = new THREE.Mesh( geometry, material )
@@ -40,6 +40,29 @@ scene.add( cube )
 
 // this moves the camera out a little to prevent the default co-ordinates (0,0,0), which would cause both the camera and the cube to be inside each other. 
 camera.position.z = 5
+
+
+/******** ADDING THE LIGHT *******/
+
+// Create a light source, tell it the color (white in our case), and how intense is should be. AmbientLight only changes how colours appear - it doesnt cast shadows as has no direction
+var ambientLight = new THREE.AmbientLight( '#FFF6E6', 0.5)
+scene.add( ambientLight )
+
+// PointLight - is like out LIGHTBULB. Light will spread in all directions equally from the point of origin.
+var pointLight = new THREE.PointLight( '#FFF6E6', 1 )
+
+// Positioned: upper right, and behind our cube.
+pointLight.position.set( 25, 50, 25 )
+scene.add( pointLight )
+
+/******** WIREFRAME BOX *******/
+
+var geometry = new THREE.BoxGeometry( 3, 3, 3)
+var material = new THREE.MeshBasicMaterial( {
+  color: '#dadada', wireframe: true, transparent: true
+})
+var wireframeCube = new THREE.Mesh ( geometry, material )
+scene.add( wireframeCube )
 
 
 /********* RENDERING THE SCENE *********/
@@ -53,23 +76,10 @@ function animate() {
   // cube.rotation runs every frame (usually 60 times per second as mentioned)
   cube.rotation.x += 0.04
   cube.rotation.y += 0.04
+  wireframeCube.rotation.x -= 0.01
+  wireframeCube.rotation.y -= 0.01
   renderer.render( scene, camera )
 }
 animate()
 
 /** ANYTHING YOU WANT TO MOVE OR CHANGE WHILE THE APP IS RUNNING, MUST GO THROUGH THE ANIMATE FUNCTION **/
-
-
-/******** ADDING THE LIGHT *******/
-
-// Create a light source, tell it the color (white in our case), and how intense is should be. AmbientLight only changes how colours appear - it doesnt cast shadows as has no direction
-var ambientLight = new THREE.AmbientLight( 0xffffff, 0.5)
-scene.add( ambientLight )
-
-// PointLight - is like out LIGHTBULB. Light will spread in all directions equally from the point of origin.
-var pointLight = new THREE.PointLight( 0xffffff, 1 )
-
-// Positioned: upper right, and behind our cube.
-pointLight.position.set( 25, 50, 25 )
-scene.add( pointLight )
-
